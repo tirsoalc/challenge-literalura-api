@@ -1,11 +1,16 @@
 package br.com.alura.literalura_api.view;
 
+import br.com.alura.literalura_api.service.MenuService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
 @Component
 public class MenuView {
+
+    @Autowired
+    private MenuService menuService;
 
     private Scanner scanner = new Scanner(System.in);
 
@@ -32,7 +37,7 @@ public class MenuView {
                 
                 switch (option) {
                     case 1:
-                        System.out.println("TODO-busca");
+                        menuService.searchAndDisplayBook(scanner);
                         break;
                     case 2:
                         System.out.println("TODO-listagem");
