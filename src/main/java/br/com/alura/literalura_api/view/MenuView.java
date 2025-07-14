@@ -40,7 +40,7 @@ public class MenuView {
                         menuService.searchAndDisplayBook(scanner);
                         break;
                     case 2:
-                        System.out.println("TODO-listagem");
+                        menuService.listAllBooks();
                         break;
                     case 3:
                         System.out.println("TODO-listagem de autores");

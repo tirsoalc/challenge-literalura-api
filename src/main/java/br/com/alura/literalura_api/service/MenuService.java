@@ -4,6 +4,7 @@ import br.com.alura.literalura_api.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -32,6 +33,26 @@ public class MenuService {
             }
         } catch (Exception e) {
             System.out.println("Erro ao buscar o livro: " + e.getMessage());
+        }
+    }
+
+    public void listAllBooks() {
+        try {
+            List<Book> books = bookService.getAllBooks();
+            
+            if (books.isEmpty()) {
+                System.out.println("Nenhum livro registrado no banco de dados.");
+                return;
+            }
+            
+            System.out.println("\n=== Livros Registrados ===");
+            for (Book book : books) {
+                displayBook(book);
+            }
+            System.out.println("Total de livros: " + books.size());
+            
+        } catch (Exception e) {
+            System.out.println("Erro ao listar livros: " + e.getMessage());
         }
     }
 
