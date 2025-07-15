@@ -46,7 +46,7 @@ public class MenuView {
                         menuService.listAllAuthors();
                         break;
                     case 4:
-                        System.out.println("TODO-filtro por ano");
+                        menuService.listAuthorsAliveInYear(scanner);
                         break;
                     case 5:
                         System.out.println("TODO-filtro por idioma");

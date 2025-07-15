@@ -104,4 +104,36 @@ public class MenuService {
         }
         System.out.println();
     }
+
+    public void listAuthorsAliveInYear(Scanner scanner) {
+        System.out.print("Insira o ano que deseja pesquisar: ");
+        String yearInput = scanner.nextLine();
+        
+        if (yearInput == null || yearInput.trim().isEmpty()) {
+            System.out.println("Ano não pode ser vazio!");
+            return;
+        }
+        
+        try {
+            int year = Integer.parseInt(yearInput.trim());
+            
+            List<Author> authorsAlive = authorService.getAuthorsAliveInYear(year);
+            
+            if (authorsAlive.isEmpty()) {
+                System.out.println("Nenhum autor encontrado vivo no ano " + year + ".");
+                return;
+            }
+            
+            System.out.println("\n=== Autores vivos em " + year + " ===");
+            for (Author author : authorsAlive) {
+                displayAuthor(author);
+            }
+            System.out.println("Total de autores vivos em " + year + ": " + authorsAlive.size());
+            
+        } catch (NumberFormatException e) {
+            System.out.println("Erro: Digite um ano válido (apenas números).");
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar autores: " + e.getMessage());
+        }
+    }
 }
