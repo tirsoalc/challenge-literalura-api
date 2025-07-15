@@ -2,12 +2,16 @@ package br.com.alura.literalura_api.service;
 
 import br.com.alura.literalura_api.model.Author;
 import br.com.alura.literalura_api.model.Book;
+import br.com.alura.literalura_api.model.Language;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
@@ -135,5 +139,93 @@ public class MenuService {
         } catch (Exception e) {
             System.out.println("Erro ao buscar autores: " + e.getMessage());
         }
+    }
+
+    public void listBooksByLanguage(String language) {
+        if (!isValidLanguage(language)) {
+            String availableCodes = Language.getAllLanguages().stream()
+                    .map(Language::getCode)
+                    .collect(Collectors.joining(", "));
+            System.out.println("Idioma inválido! Use: " + availableCodes);
+            return;
+        }
+        
+        try {
+            List<Book> booksByLanguage = bookService.getBooksByLanguage(language);
+            
+            if (booksByLanguage.isEmpty()) {
+                System.out.println("Nenhum livro encontrado no idioma: " + getLanguageName(language));
+                return;
+            }
+            
+            displayBooksInLanguage(booksByLanguage, language);
+            displayLanguageStatistics(booksByLanguage, language);
+            
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar livros por idioma: " + e.getMessage());
+        }
+    }
+
+    private boolean isValidLanguage(String language) {
+        return Language.isValidCode(language);
+    }
+
+    private void displayBooksInLanguage(List<Book> books, String language) {
+        System.out.println("\n=== Livros em " + getLanguageName(language) + " ===");
+        for (Book book : books) {
+            displayBook(book);
+        }
+    }
+
+    private void displayLanguageStatistics(List<Book> books, String language) {
+        int totalBooks = books.size();
+        double totalDownloads = calculateTotalDownloads(books);
+        double averageDownloads = calculateAverageDownloads(books);
+        long uniqueAuthors = countUniqueAuthors(books);
+        
+        System.out.println("\n=== Estatísticas ===");
+        System.out.println("Total de livros em " + getLanguageName(language) + ": " + totalBooks);
+        System.out.println("Total de downloads: " + String.format("%.0f", totalDownloads));
+        System.out.println("Média de downloads: " + String.format("%.1f", averageDownloads));
+        System.out.println("Autores únicos: " + uniqueAuthors);
+        
+        displayMostDownloadedBook(books);
+    }
+
+    private double calculateTotalDownloads(List<Book> books) {
+        return books.stream()
+                .mapToDouble(Book::getDownloadCount)
+                .sum();
+    }
+
+    private double calculateAverageDownloads(List<Book> books) {
+        return books.stream()
+                .mapToDouble(Book::getDownloadCount)
+                .average()
+                .orElse(0.0);
+    }
+
+    private long countUniqueAuthors(List<Book> books) {
+        return books.stream()
+                .filter(book -> book.getAuthor() != null)
+                .map(book -> book.getAuthor().getName())
+                .distinct()
+                .count();
+    }
+
+    private void displayMostDownloadedBook(List<Book> books) {
+        books.stream()
+                .max((b1, b2) -> Double.compare(b1.getDownloadCount(), b2.getDownloadCount()))
+                .ifPresent(book -> System.out.println("Livro mais baixado: " + book.getTitle() + 
+                                                   " (" + book.getDownloadCount() + " downloads)"));
+    }
+
+    private String getLanguageName(String code) {
+        Language language = Language.fromCode(code);
+        return language != null ? language.getDisplayName() : code;
+    }
+
+    public List<Language> getAvailableLanguages() {
+        return Language.getAllLanguages();
     }
 }

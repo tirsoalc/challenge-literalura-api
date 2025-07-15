@@ -1,5 +1,6 @@
 package br.com.alura.literalura_api.view;
 
+import br.com.alura.literalura_api.model.Language;
 import br.com.alura.literalura_api.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -49,7 +50,7 @@ public class MenuView {
                         menuService.listAuthorsAliveInYear(scanner);
                         break;
                     case 5:
-                        System.out.println("TODO-filtro por idioma");
+                        showLanguageMenu();
                         break;
                     case 0:
                         System.out.println("Saindo...");
@@ -62,5 +63,23 @@ public class MenuView {
                 scanner.nextLine(); // clear invalid input
             }
         }
+    }
+
+    private void showLanguageMenu() {
+        System.out.println("Insira o idioma para realizar a busca:");
+        
+        for (Language language : menuService.getAvailableLanguages()) {
+            System.out.println(language.getCode() + " - " + language.getDisplayName());
+        }
+        
+        System.out.print("Digite o código do idioma: ");
+        String languageInput = scanner.nextLine();
+        
+        if (languageInput == null || languageInput.trim().isEmpty()) {
+            System.out.println("Idioma não pode ser vazio!");
+            return;
+        }
+        
+        menuService.listBooksByLanguage(languageInput.trim().toLowerCase());
     }
 }
