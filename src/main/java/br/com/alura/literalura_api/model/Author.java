@@ -72,12 +72,5 @@ public class Author {
     public void setBooks(List<Book> books) {
         this.books = books;
     }
-    
-    @Override
-    public String toString() {
-        return "Autor: " + name + "\n" +
-               "Ano de nascimento: " + birthYear + "\n" +
-               "Ano de falecimento: " + deathYear + "\n" +
-               "Livros: " + books.stream().map(Book::getTitle).toList();
-    }
+
 }

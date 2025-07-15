@@ -72,14 +72,5 @@ public class Book {
     public void setAuthor(Author author) {
         this.author = author;
     }
-    
-    @Override
-    public String toString() {
-        return "------Livro------\n" +
-               "Título: " + title + "\n" +
-               "Autor: " + (author != null ? author.getName() : "Desconhecido") + "\n" +
-               "Idioma: " + language + "\n" +
-               "Número de downloads: " + downloadCount + "\n" +
-               "-----------------";
-    }
+
 }

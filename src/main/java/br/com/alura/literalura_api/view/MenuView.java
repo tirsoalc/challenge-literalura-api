@@ -43,7 +43,7 @@ public class MenuView {
                         menuService.listAllBooks();
                         break;
                     case 3:
-                        System.out.println("TODO-listagem de autores");
+                        menuService.listAllAuthors();
                         break;
                     case 4:
                         System.out.println("TODO-filtro por ano");
